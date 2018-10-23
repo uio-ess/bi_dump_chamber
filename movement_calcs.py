@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+# assuming UHV actuator part# HLSML64-600-H
+# all units in mm
+
+actuator_travel = 600 # maximum possible travel of actuator
+actuator_flange_spacing_min = 260 # minimum possible distance from top of moving flange to bottom of stationary one
+acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
+
+# the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
+vessel_cross_center_to_actuator_bottom_flange = 682.45
+
+# the minimum distance between the bottom edge of the stationary acutator flange and the top of the sample holder crossbar
+# such that the cross bar doesn't crash into anything when the moving flange is at its highest point
+required_top_clearance = 60
+
+# length of the long vertical shaft in the screen holder frame
+long_shaft_length = acutator_flange_spacing_max + required_top_clearance
+
+# vertical dimension of the top horizontal screen holder bar
+screen_holder_bar_width = 20
+
+# vertical spacing between the horizontal screen holder bar and the top edge of the top screen
+top_screen_holder_spacing = 10
+
+# vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
+screen_screen_spacing = 10
+
+# vertical distance between the top edge of the screen and the bottom surface of the long vertical shaft
+top_screen_long_shaft_spacing = screen_holder_bar_width + top_screen_holder_spacing
+
+# vertical dimension of the screen
+screen_dim = 230
+
+side_shaft_lengths = top_screen_long_shaft_spacing + 2 * screen_dim + screen_screen_spacing
+
+#  possible screen positions
+#  A = no screen in beam
+#  B = lower screen installed
+#  C = upper screen installed
+
+# the actuator will have 5 location sensing switches:
+# LT = the top limit switch, prevents the screens from being pulled out too far
+# SA = the position switch for when the screen is in position A
+# SB = the position switch for when the screen is in position B
+# SC = the position switch for when the screen is in position C
+# LB = the bottom limit switch, prevents the screens from being moved too far into the chamber
+
+# position switch locations:
+# defined as switch instillation position such that the distance between the midpoint of the switch
+# hysteresis occurs when the the bottom of the stationary flange is this many mm away from the top of the moving flange
+# must be on the interval [fully withdrawn, fully inserted] = [860,260]
+
+LT_pos = 855  # this is 5mm away from when the actuator would crash into its self
+SA_pos = 850  # the screens are now very close to as far away from the beam as we can possibly get them
+SB_pos = 1.5 * screen_dim + screen_screen_spacing + screen_holder_bar_width + top_screen_holder_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange
+SC_pos = 0.5 * screen_dim + screen_holder_bar_width + top_screen_holder_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange
+LB_pos = SC_pos - 20
+
+def printvars():
+  tmp = globals().copy()
+  [print(k,'  :  ', '{:} [mm]'.format(v)) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
+
+printvars()
+print('Done!')
