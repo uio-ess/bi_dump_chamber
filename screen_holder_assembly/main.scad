@@ -3,7 +3,7 @@ include <everynut/everynut.scad>
 include <al_strut.scad>
 
 screenX = 230;
-screenY = 240;
+screenY = 230;
 screenT = 5;
 
 // all dims in mm
@@ -14,8 +14,10 @@ strut_square = 20;
 mover_flange_to_top_of_frame = 922;
 
 crossbar_width = screenX-2*strut_square;
+echo(crossbar_width);
 
 sidebar_length = spacing_between_screens+2*screenY+strut_square;
+echo(sidebar_length);
 
 screen_mount_hole_diameter = 5;
 
