@@ -1,10 +1,10 @@
-include <threads.scad>
-include <everynut/everynut.scad>
+//include <threads.scad>
+//include <everynut/everynut.scad>
 include <al_strut.scad>
 
 screenX = 230;
 screenY = 230;
-screenT = 5;
+screenT = 1;
 
 // all dims in mm
 spacing_between_screens = 10;
