@@ -11,8 +11,8 @@ acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
 vessel_cross_center_to_actuator_bottom_flange = 682.45
 
 # the minimum distance between the bottom edge of the stationary acutator flange and the top of the sample holder crossbar
-# such that the cross bar doesn't crash into anything when the moving flange is at its highest point
-required_top_clearance = 60
+# such that the cross bar can't crash into the top of the chamber when the moving flange is at its highest point
+required_top_clearance = 55
 
 # length of the long vertical shaft in the screen holder frame
 long_shaft_length = acutator_flange_spacing_max + required_top_clearance
@@ -21,10 +21,10 @@ long_shaft_length = acutator_flange_spacing_max + required_top_clearance
 screen_holder_bar_width = 20
 
 # vertical spacing between the horizontal screen holder bar and the top edge of the top screen
-top_screen_holder_spacing = 10
+top_screen_holder_spacing = 5
 
 # vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
-screen_screen_spacing = 10
+screen_screen_spacing = 5
 
 # vertical distance between the top edge of the screen and the bottom surface of the long vertical shaft
 top_screen_long_shaft_spacing = screen_holder_bar_width + top_screen_holder_spacing
@@ -33,6 +33,9 @@ top_screen_long_shaft_spacing = screen_holder_bar_width + top_screen_holder_spac
 screen_dim = 230
 
 side_shaft_lengths = top_screen_long_shaft_spacing + 2 * screen_dim + screen_screen_spacing
+
+# total frame holder assembly vertical dimension
+assembly_dim = long_shaft_length + side_shaft_lengths
 
 #  possible screen positions
 #  A = no screen in beam
@@ -59,9 +62,20 @@ SB_pos = 1.5 * screen_dim + screen_screen_spacing + top_screen_long_shaft_spacin
 SC_pos = 0.5 * screen_dim + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange # top screen centered in beam
 LB_pos = SC_pos - 20  # no reason to allow for pushing the screens in further than a few mm past SC
 
+# distance between the center of the chamber and the bottom flange surface
+vessel_cross_center_to_vessel_bottom_flange = 463.25
+
+# distance between the bottom of the frame assembly and bottom flange surface when at LB
+LB_crash_padding = vessel_cross_center_to_vessel_bottom_flange + vessel_cross_center_to_actuator_bottom_flange - assembly_dim + LB_pos
+
+# distance between center of the chamber and the bottom of the frame assembly when at SA
+SA_removal_padding = vessel_cross_center_to_actuator_bottom_flange - (assembly_dim - SA_pos)
+
 def printvars():
   tmp = globals().copy()
-  [print(k,'  :  ', '{:} [mm]'.format(v)) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
+  [print(k,'  :  ', '{:.2f} [mm]'.format(v)) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
+  with open("geom_calc_results.txt", "w") as results:
+    [print(k,'  :  ', '{:} [mm]'.format(v), file=results) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
 
 printvars()
 print('Done!')

@@ -7,13 +7,13 @@ screenY = 230;
 screenT = 1;
 
 // all dims in mm
-spacing_between_screens = 10;
+spacing_between_screens = 5;
 
-top_bar_spacing = 10;
+top_bar_spacing = 5;
 
 strut_square = 20;
 
-mover_flange_to_top_of_frame = 920;
+mover_flange_to_top_of_frame = 915;
 
 crossbar_width = screenX-2*strut_square;
 echo(crossbar_width);
