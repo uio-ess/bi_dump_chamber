@@ -29,9 +29,10 @@ screen_screen_spacing = 5
 # vertical distance between the top edge of the screen and the bottom surface of the long vertical shaft
 top_screen_long_shaft_spacing = screen_holder_bar_width + top_screen_holder_spacing
 
-# vertical dimension of the screen
+# dimension of the screen (both x and y)
 screen_dim = 230
 
+crossbar_shaft_width = screen_dim-2*screen_holder_bar_width
 side_shaft_lengths = top_screen_long_shaft_spacing + 2 * screen_dim + screen_screen_spacing
 
 # total frame holder assembly vertical dimension
