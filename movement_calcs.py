@@ -65,10 +65,10 @@ LB_pos = SC_pos - 20  # no reason to allow for pushing the screens in further th
 # distance between the center of the chamber and the bottom flange surface
 vessel_cross_center_to_vessel_bottom_flange = 463.25
 
-# distance between the bottom of the frame assembly and bottom flange surface when at LB
+# distance between the bottom of the frame assembly and bottom flange surface when at LB (must be > 0 to avoid crash into bottom of chamber)
 LB_crash_padding = vessel_cross_center_to_vessel_bottom_flange + vessel_cross_center_to_actuator_bottom_flange - assembly_dim + LB_pos
 
-# distance between center of the chamber and the bottom of the frame assembly when at SA
+# distance between center of the chamber and the bottom of the frame assembly when at SA (should be at least 125 to clear beam pipe)
 SA_removal_padding = vessel_cross_center_to_actuator_bottom_flange - (assembly_dim - SA_pos)
 
 def printvars():
