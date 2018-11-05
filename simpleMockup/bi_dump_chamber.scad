@@ -4,6 +4,8 @@ flangeT=23;
 pipeOuterD=273.1;
 pipeWallT=4.78;
 
+subtractFudge = 2;
+
 // downstream chamber
 drawChamber();
 
@@ -37,9 +39,9 @@ module drawChamber ( botPipeL=460, topPipeL=630, upstreamPipeL=400, downstreamPi
                 cylinder(h=viewPipeL, d=pipeOuterD); //vert pipe
             }
         }
-        rotate([0,-90,0]) translate([0,0,-downstreamPipeL]) cylinder(h=downstreamPipeL+upstreamPipeL, d=pipeOuterD-2*pipeWallT); // inner horz pipe
-        translate([0,0,-botPipeL]) cylinder(h=botPipeL+topPipeL, d=pipeOuterD-2*pipeWallT); //inner vert pipe
-        rotate([-90,0,viewPortZAngle+90]) translate([0,0,-viewPipeL]) cylinder(h=viewPipeL, d=pipeOuterD-2*pipeWallT); //inner view pipe
+        rotate([0,-90,0]) translate([0,0,-downstreamPipeL-subtractFudge/2]) cylinder(h=downstreamPipeL+upstreamPipeL+subtractFudge, d=pipeOuterD-2*pipeWallT); // inner horz pipe
+        translate([0,0,-botPipeL-subtractFudge/2]) cylinder(h=botPipeL+topPipeL+subtractFudge, d=pipeOuterD-2*pipeWallT); //inner vert pipe
+        rotate([-90,0,viewPortZAngle+90]) translate([0,0,-viewPipeL-subtractFudge/2]) cylinder(h=viewPipeL+subtractFudge, d=pipeOuterD-2*pipeWallT); //inner view pipe
     }
 }
 
