@@ -57,8 +57,8 @@ assembly_dim = long_shaft_length + side_shaft_lengths
 
 minimum_switch_switch_spacing = 5  # smallest possible spacing between limit/position switches
 
-LT_pos = 855  # just some number to prevent the actuator from crashing into its self at the end of travel
-SA_pos = LT_pos - minimum_switch_switch_spacing  # the screens are now very close to as far away from the beam as we can possibly get them
+LT_pos = 860  # just some number to prevent the actuator from crashing into its self at the end of travel
+SA_pos = LT_pos - minimum_switch_switch_spacing - 5  # the screens are now very close to as far away from the beam as we can possibly get them
 SB_pos = 1.5 * screen_dim + screen_screen_spacing + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange  # bottom screen centered in beam
 SC_pos = 0.5 * screen_dim + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange # top screen centered in beam
 LB_pos = SC_pos - 20  # no reason to allow for pushing the screens in further than a few mm past SC
