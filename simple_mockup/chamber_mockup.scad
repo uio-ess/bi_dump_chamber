@@ -6,18 +6,6 @@ pipeWallT=4.78;
 
 subtractFudge = 2;
 
-// downstream chamber
-drawChamber();
-
-//translate ([-600,0,0]) translate ([400,0,0]) drawChamber(); 
-
-//translate ([-1500,0,0]) drawChamber(); 
-
-//translate ([-600,0,0]) drawChamber(); 
-
-// upstream chamber
-//translate ([-400,0,0]) drawChamber(upstreamPipeL=200, downstreamPipeL=400, viewPortZAngle=-45); // downstream chamber
-
 module drawChamber ( botPipeL=460, topPipeL=630, upstreamPipeL=400, downstreamPipeL=200, viewPipeL=380, viewPortZAngle=-135 ) {
     difference(){
         union(){
