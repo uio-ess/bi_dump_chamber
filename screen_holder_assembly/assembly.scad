@@ -16,10 +16,10 @@ strut_square = 20;
 long_rod_length = 915;
 
 crossbar_width = screenX-2*strut_square;
-echo(crossbar_width);
+//echo(crossbar_width);
 
 sidebar_length = spacing_between_screens+2*screenY + strut_square + top_bar_spacing;
-echo(sidebar_length);
+//echo(sidebar_length);
 
 screen_mount_hole_diameter = 5;
 

@@ -22,11 +22,11 @@ module things_that_move(mover_position){
     rotate([0,0,135]) translate([0,0,-long_rod_length+vessel_cross_center_to_actuator_bottom_flange+mover_position]) assembly();
 }
 
-
 // animation
 min_actuator_position = LB_pos;
 max_actuator_position = LT_pos;
-actuator_position = LB_pos + $t*(LT_pos-LB_pos);
+t = 2*abs($t-0.5);
+actuator_position = LB_pos + t*(LT_pos-LB_pos);
 things_that_move (actuator_position);
 
 // at top limit switch (should never be here, but this should be safe)
