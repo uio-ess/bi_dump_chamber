@@ -1,3 +1,6 @@
+// written by grey@christoforo.net
+// movies generated like this;
+// ffmpeg -framerate 30 -pattern_type glob -i '*.png' -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -pix_fmt yuv420p out2.mp4
 include <../screen_holder_assembly/assembly.scad>
 include <../simple_mockup/chamber_mockup.scad>
 
@@ -19,11 +22,18 @@ module things_that_move(mover_position){
     rotate([0,0,135]) translate([0,0,-long_rod_length+vessel_cross_center_to_actuator_bottom_flange+mover_position]) assembly();
 }
 
+
+// animation
+min_actuator_position = LB_pos;
+max_actuator_position = LT_pos;
+actuator_position = LB_pos + $t*(LT_pos-LB_pos);
+things_that_move (actuator_position);
+
 // at top limit switch (should never be here, but this should be safe)
 //things_that_move (LT_pos);
 
 // at screen withdrawn position switch
-things_that_move (SA_pos);
+//things_that_move (SA_pos);
 
 // at bottom screen position switch
 //things_that_move (SB_pos);
