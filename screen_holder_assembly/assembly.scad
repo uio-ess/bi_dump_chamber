@@ -3,7 +3,7 @@ include <al_strut.scad>
 
 // all dims in mm
 
-screenX = 230;
+screenX = 320;
 screenY = 230;
 screenT = 1;
 
