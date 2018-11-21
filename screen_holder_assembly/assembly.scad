@@ -26,6 +26,21 @@ screen_mount_hole_diameter = 5;
 
 screen_mount_hole_offset = strut_square/2;
 
+//3cm of m5 threads
+//5cm of smooth
+
+module mount_piece(){
+    c_height = 50;
+    difference(){
+        union(){
+            metric_thread (diameter=5, pitch=0.8, length=30);
+            translate([0,0,-c_height]) cylinder(d=5,h=c_height);
+        }
+        translate([0,0,-20]) rotate_extrude() translate([5,0,0]) circle(3);
+        cylinder(h=120,d=2,center=true);
+    }
+}
+
 // draws the whole assembly
 module assembly(){
     extrusion_profile_20x20_v_slot_smooth(size=strut_square, height=long_rod_length);
@@ -52,21 +67,8 @@ module assembly(){
         rotate([90,0,0]) translate ([screenX-screen_mount_hole_offset,screenY-screen_mount_hole_offset,0]) cylinder(h=screenT*2.2, d=screen_mount_hole_diameter, center=true);
         rotate([90,0,0]) translate ([screen_mount_hole_offset,screenY-screen_mount_hole_offset,0]) cylinder(h=screenT*2.2, d=screen_mount_hole_diameter, center=true);
     }
-}
-//3cm of m5 threads
-//5cm of smooth
-
-module mount_piece(){
-    c_height = 50;
-    difference(){
-        union(){
-            metric_thread (diameter=5, pitch=0.8, length=30);
-            translate([0,0,-c_height]) cylinder(d=5,h=c_height);
-        }
-        translate([0,0,-20]) rotate_extrude() translate([5,0,0]) circle(3);
-        cylinder(h=120,d=2,center=true);
-    }
-    
+    translate([0,0,long_rod_length]) mount_piece();
 }
 
-mount_piece();
+
+//mount_piece();
