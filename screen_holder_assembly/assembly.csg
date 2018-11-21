@@ -1,0 +1,19 @@
+group() {
+	group() {
+		difference() {
+			union() {
+				multmatrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, -50], [0, 0, 0, 1]]) {
+					cylinder($fn = 30, $fa = 12, $fs = 2, h = 50, r1 = 2.5, r2 = 2.5, center = false);
+				}
+			}
+			multmatrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, -20], [0, 0, 0, 1]]) {
+				rotate_extrude(convexity = 2, $fn = 30, $fa = 12, $fs = 2) {
+					multmatrix([[1, 0, 0, 5], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]) {
+						circle($fn = 30, $fa = 12, $fs = 2, r = 3);
+					}
+				}
+			}
+			cylinder($fn = 30, $fa = 12, $fs = 2, h = 120, r1 = 1, r2 = 1, center = true);
+		}
+	}
+}

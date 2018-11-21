@@ -27,7 +27,7 @@ min_actuator_position = LB_pos;
 max_actuator_position = LT_pos;
 t = 2*abs($t-0.5);
 actuator_position = SC_pos + t*(SA_pos-SC_pos);
-things_that_move (actuator_position);
+//things_that_move (actuator_position);
 
 // at top limit switch (should never be here, but this should be safe)
 //things_that_move (LT_pos);
@@ -36,7 +36,7 @@ things_that_move (actuator_position);
 //things_that_move (SA_pos);
 
 // at bottom screen position switch
-//things_that_move (SB_pos);
+things_that_move (SB_pos);
 
 // at top screen position switch
 //things_that_move (SC_pos);
