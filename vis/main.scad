@@ -1,5 +1,8 @@
 // written by grey@christoforo.net
 // movies generated like this;
+//time = 0
+//steps = 500
+//FPS = 100
 // ffmpeg -framerate 30 -pattern_type glob -i '*.png' -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -pix_fmt yuv420p out2.mp4
 include <../screen_holder_assembly/assembly.scad>
 include <../simple_mockup/chamber_mockup.scad>
@@ -27,7 +30,7 @@ min_actuator_position = LB_pos;
 max_actuator_position = LT_pos;
 t = 2*abs($t-0.5);
 actuator_position = SC_pos + t*(SA_pos-SC_pos);
-//things_that_move (actuator_position);
+things_that_move (actuator_position);
 
 // at top limit switch (should never be here, but this should be safe)
 //things_that_move (LT_pos);
@@ -36,7 +39,7 @@ actuator_position = SC_pos + t*(SA_pos-SC_pos);
 //things_that_move (SA_pos);
 
 // at bottom screen position switch
-things_that_move (SB_pos);
+//things_that_move (SB_pos);
 
 // at top screen position switch
 //things_that_move (SC_pos);
