@@ -62,7 +62,7 @@ module extrusion_profile_20x20_v_slot_smooth(size=20, height=10) {
 				rotate([0,0,180]) extrusion_profile_20x20_v_slot_part_smooth(size);
 				rotate([0,0,270]) extrusion_profile_20x20_v_slot_part_smooth(size);
 			}
-			circle([0,0],r=size/20.*2.5);
+			circle([0,0],d=(size/20.*2.5)/2);
 		}
 	}
 }
