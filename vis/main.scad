@@ -10,13 +10,13 @@ include <../simple_mockup/chamber_mockup.scad>
 vessel_cross_center_to_actuator_bottom_flange = 682.45;
 
 act_flange_D = 114;
-
+$fn=50;
 // switch positions
 LT_pos=860.00;
 SA_pos=850.00;
-SB_pos=607.55;
-SC_pos=372.55+3;
-LB_pos=352.55;
+SB_pos=612.55;
+SC_pos=377.55;
+LB_pos=357.55;
 
 
 // draws the stuff that will move as a funciton of actuator flange spacing
@@ -39,10 +39,10 @@ actuator_position = SC_pos + t*(SA_pos-SC_pos);
 //things_that_move (SA_pos);
 
 // at bottom screen position switch
-//things_that_move (SB_pos);
+things_that_move (SB_pos);
 
 // at top screen position switch
-things_that_move (SC_pos);
+//things_that_move (SC_pos);
 
 // at bottom limit switch (should never be here, but this should be safe)
 //things_that_move (LB_pos);

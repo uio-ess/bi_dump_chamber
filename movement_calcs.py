@@ -18,7 +18,7 @@ required_top_clearance = 55
 long_shaft_length = acutator_flange_spacing_max + required_top_clearance
 
 # vertical dimension of the top horizontal screen holder bar
-screen_holder_bar_width = 20
+screen_holder_bar_width = 25
 
 # vertical spacing between the horizontal screen holder bar and the top edge of the top screen
 top_screen_holder_spacing = 5

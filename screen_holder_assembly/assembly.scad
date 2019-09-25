@@ -56,7 +56,7 @@ module mount_piece(){
 
 
 module view_ellipse(){
-        color([0,1,0]) translate([screenX/2, screenT, screenY/2]) rotate([90, 0 ,0]) scale([view_ellipse_XY, view_ellipse_Z]) circle(d=1);
+        //color([0,1,0]) translate([screenX/2, screenT, screenY/2]) rotate([90, 0 ,0]) scale([view_ellipse_XY, view_ellipse_Z]) circle(d=1);
 }
 
 module pipe_view_circle(){
@@ -79,8 +79,8 @@ module assembly(){
     
     //screen1
     translate([-screenX/2,strut_square/2,-screenY-strut_square-top_bar_spacing]){
-        view_ellipse();
-        pipe_view_circle();
+        translate ([0,0,-0]) view_ellipse();
+        translate ([0,0,-0]) pipe_view_circle();
         #color([1,1,1]) difference(){
             cube([screenX, screenT, screenY], center=false);
             rotate([90,0,0]) translate ([screen_mount_hole_offset,screen_mount_hole_offset,0]) cylinder(h=screenT*2.2, d=screen_mount_hole_diameter, center=true);
