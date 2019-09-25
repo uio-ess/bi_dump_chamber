@@ -15,7 +15,7 @@ act_flange_D = 114;
 LT_pos=860.00;
 SA_pos=850.00;
 SB_pos=607.55;
-SC_pos=372.55;
+SC_pos=372.55+3;
 LB_pos=352.55;
 
 

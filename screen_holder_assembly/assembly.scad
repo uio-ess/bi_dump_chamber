@@ -66,7 +66,7 @@ module pipe_view_circle(){
 // draws the whole assembly
 module assembly(){
     // long "shaft" bar
-    extrusion_profile_20x20_v_slot_smooth(size=strut_square, height=long_rod_length);
+    rotate([0,0,45]) extrusion_profile_20x20_v_slot_smooth(size=strut_square, height=long_rod_length);
     
     //cross bar
     translate([-crossbar_width/2,0,-strut_square/2]) rotate([0,90,0]) extrusion_profile_20x20_v_slot_smooth(size=strut_square, height=crossbar_width);
