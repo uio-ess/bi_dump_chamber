@@ -8,14 +8,17 @@ actuator_flange_spacing_min = 260 # minimum possible distance from top of moving
 acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
 
 # the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
-vessel_cross_center_to_actuator_bottom_flange = 682.45
+#vessel_cross_center_to_actuator_bottom_flange = 682.45
+vessel_cross_center_to_actuator_bottom_flange = 685.05
+
 
 # distance between the center of the chamber and the bottom flange surface
 vessel_cross_center_to_vessel_bottom_flange = 464.42
 
 # the minimum distance between the bottom edge of the stationary acutator flange and the top of the sample holder crossbar
 # such that the cross bar can't crash into the top of the chamber when the moving flange is at its highest point
-required_top_clearance = 63.80 + 1.2
+# and so the beam does not roll off the rollers
+required_top_clearance = 58.06
 
 # length of the long vertical shaft in the screen holder frame
 long_shaft_length = acutator_flange_spacing_max + required_top_clearance
@@ -24,7 +27,7 @@ long_shaft_length = acutator_flange_spacing_max + required_top_clearance
 screen_holder_bar_width = 25
 
 # vertical spacing between the bottom face of the horizontal screen holder bar and the top edge of the top screen
-top_screen_holder_spacing = 5.5
+top_screen_holder_spacing = 5.0
 
 # vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
 screen_screen_spacing = 0
@@ -45,7 +48,7 @@ top_screen_beam_center_vertical_offset = -5
 
 beam_pipe_diameter = 250
 
-crossbar_shaft_width = beam_pipe_diameter+2*screen_holder_bar_width
+crossbar_shaft_length = beam_pipe_diameter+2*screen_holder_bar_width
 side_shaft_lengths = 2 * screen_dim_y + screen_screen_spacing + top_screen_holder_spacing
 
 # total frame holder assembly vertical dimension
