@@ -7,10 +7,11 @@ actuator_travel = 600 # maximum possible travel of actuator
 actuator_flange_spacing_min = 260 # minimum possible distance from top of moving flange to bottom of stationary one
 acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
 
-# the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
-#vessel_cross_center_to_actuator_bottom_flange = 682.45
-vessel_cross_center_to_actuator_bottom_flange = 685.05
+# we'll install the lower physical travel hard stop this far away from the most contracted position
+bottom_end_stop_padding = 10
 
+# the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
+vessel_cross_center_to_actuator_bottom_flange = 685.05
 
 # distance between the center of the chamber and the bottom flange surface
 vessel_cross_center_to_vessel_bottom_flange = 464.42
@@ -18,44 +19,65 @@ vessel_cross_center_to_vessel_bottom_flange = 464.42
 # the minimum distance between the bottom edge of the stationary acutator flange and the top of the sample holder crossbar
 # such that the cross bar can't crash into the top of the chamber when the moving flange is at its highest point
 # and so the beam does not roll off the rollers
-required_top_clearance = 58.06
+required_top_clearance = 61.83
 
-# length of the long vertical shaft in the screen holder frame
-long_shaft_length = acutator_flange_spacing_max + required_top_clearance
+beam_pipe_diameter = 250
+view_diameter = 220
 
 # vertical dimension of the top horizontal screen holder bar (aka the bar's cross-sectional, width=height)
-screen_holder_bar_width = 25
+#screen_holder_bar_width = 25
+crossbar_height = 5
+square_crosssection = 25
 
-# vertical spacing between the bottom face of the horizontal screen holder bar and the top edge of the top screen
-top_screen_holder_spacing = 5.0
+
 
 # vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
 screen_screen_spacing = 0
 
 # vertical distance between the top edge of the screen and the bottom surface of the long vertical shaft
-#top_screen_long_shaft_spacing = screen_holder_bar_width + top_screen_holder_spacing
+#top_screen_long_shaft_spacing = crossbar_height + top_screen_holder_spacing
 
 # dimension of the screen
-#screen_dim_y = 230
-screen_dim_y = 220
+screen_dim_y = 230
 screen_dim_x = 290
 
-# when we're at SB (bottom screen in beam) the beam center will be this many mm above the center of the screen (going to be positive), must be on [-5,5]
-bottom_screen_beam_center_vertical_offset = 5
+# when we're at SB (bottom screen in beam) the beam center will be this many mm above the center of the screen (going to be positive)
+# must be on [-5,5] so that the screen stays in the viewing area
+bottom_screen_beam_center_vertical_offset = 0
+#bottom_screen_beam_center_vertical_offset = 5
 
-# when we're at SC (top screen in beam) the beam center will be this many mm above the center of the screen (going to be negative) , must be on [-5,5]
+# when we're at SC (top screen in beam) the beam center will be this many mm above the center of the screen (going to be negative)
+
+#top_screen_beam_center_vertical_offset = -5
 top_screen_beam_center_vertical_offset = -5
 
-beam_pipe_diameter = 250
+# amount of buffer we'll move the top stopper down from its absolute maximum value
+top_stopper_buffer = 1
 
-crossbar_shaft_length = beam_pipe_diameter+2*screen_holder_bar_width
+minimum_switch_switch_spacing = 11.36  # smallest possible spacing between limit/position switches
+minimum_switch_stopper_spacing = 1 # smallest possible spacing between limit switches and end stops
+
+# vertical spacing between the bottom face of the horizontal screen holder bar and the top edge of the top screen
+#top_screen_holder_spacing = 17.36
+top_screen_holder_spacing = top_screen_beam_center_vertical_offset + (beam_pipe_diameter-screen_dim_y)/2 + minimum_switch_stopper_spacing + minimum_switch_switch_spacing
+
+# this is the most travel we'll ever posibly be able to get because anything more will mean cross bar crash into top flange or cross bar enters beam pipe
+maximum_stopper_spacing = vessel_cross_center_to_actuator_bottom_flange - beam_pipe_diameter/2 - required_top_clearance - crossbar_height
+
+# anything higher than this would fail the maximum_stopper_spacing requirement
+absolute_highest_position_for_top_stopper = actuator_flange_spacing_min + maximum_stopper_spacing + bottom_end_stop_padding
+
+# length of the long vertical shaft in the screen holder frame
+long_shaft_length = vessel_cross_center_to_actuator_bottom_flange - crossbar_height - screen_dim_y/2 + actuator_flange_spacing_min + bottom_end_stop_padding - top_screen_holder_spacing + minimum_switch_switch_spacing + minimum_switch_stopper_spacing + top_screen_beam_center_vertical_offset
+
+crossbar_shaft_length = beam_pipe_diameter+2*square_crosssection
 side_shaft_lengths = 2 * screen_dim_y + screen_screen_spacing + top_screen_holder_spacing
 
 # total frame holder assembly vertical dimension
-assembly_dim = long_shaft_length + side_shaft_lengths + screen_holder_bar_width
+assembly_dim = long_shaft_length + side_shaft_lengths + crossbar_height
 
-# this is the most travel we'll ever posibly be able to get because anything more will mean cross bar crash into top flange or cross bar enters beam pipe
-maximum_stopper_spacing = vessel_cross_center_to_actuator_bottom_flange - beam_pipe_diameter/2 - required_top_clearance - screen_holder_bar_width
+total_bar_length_need = 2*side_shaft_lengths + long_shaft_length
+
 
 #  possible screen positions
 #  A = no screen in beam
@@ -74,18 +96,28 @@ maximum_stopper_spacing = vessel_cross_center_to_actuator_bottom_flange - beam_p
 # hysteresis occurs when the the bottom of the stationary flange is this many mm away from the top of the moving flange
 # must be on the interval [fully withdrawn, fully inserted] = [860,260]
 
-minimum_switch_switch_spacing = 0  # smallest possible spacing between limit/position switches
-minimum_switch_stopper_spacing = 0 # smallest possible spacing between limit switches and end stops
 
-TOP_STOP_pos = acutator_flange_spacing_max # location to install the top movement stopper 
-LT_pos = TOP_STOP_pos - minimum_switch_stopper_spacing  # just some number to prevent the actuator from crashing into its self at the end of travel
-SA_pos = LT_pos - minimum_switch_switch_spacing # the screens are now very close to as far away from the beam as we can possibly get them
+
+BOTTOM_STOP_POS = actuator_flange_spacing_min + bottom_end_stop_padding # location to install the bottom movement stopper
+LB_pos = BOTTOM_STOP_POS + minimum_switch_stopper_spacing  # prevents hitting the bottom stopper
+
+TOP_STOP_POS = absolute_highest_position_for_top_stopper - top_stopper_buffer # location to install the top movement stopper 
+LT_pos = TOP_STOP_POS - minimum_switch_stopper_spacing  # prevents hitting the top stopper
+
+# valid screens removed position
+SA_pos = LT_pos - minimum_switch_switch_spacing
+
+# valid bottom screen in beam position
 SB_pos = assembly_dim - vessel_cross_center_to_actuator_bottom_flange - screen_dim_y/2 - bottom_screen_beam_center_vertical_offset
-SC_pos = assembly_dim - vessel_cross_center_to_actuator_bottom_flange - screen_dim_y - screen_screen_spacing - screen_dim_y/2 - top_screen_beam_center_vertical_offset
-#SB_pos = 1.5 * screen_dim_y + screen_screen_spacing + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange  # bottom screen centered in beam
+
+# valid top screen in beam position
+SC_pos = LB_pos + minimum_switch_switch_spacing
+#SC_pos = assembly_dim - vessel_cross_center_to_actuator_bottom_flange - screen_dim_y - screen_screen_spacing - screen_dim_y/2 - top_screen_beam_center_vertical_offset
+
+#SB_pos = 1.5 * screen_dim_y + screen_screen_spacing + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange  
 #SC_pos = 0.5 * screen_dim_y + top_screen_long_shaft_spacing + long_shaft_length - vessel_cross_center_to_actuator_bottom_flange # top screen centered in beam
-LB_pos = SC_pos - minimum_switch_switch_spacing  # no reason to allow for pushing the screens in further than a few mm past SC
-BOTTOM_STOP_POS = LB_pos - minimum_switch_stopper_spacing # location to install the bottom movement stopper
+#LB_pos = BOTTOM_STOP_POS + minimum_switch_switch_spacing  # no reason to allow for pushing the screens in further than a few mm past SC
+#BOTTOM_STOP_POS = actuator_flange_spacing_min + end_stop_padding # location to install the bottom movement stopper
 
 # check that everything is within the travel limits of the actuator
 # highest_thing = max([TOP_STOP_pos, LT_pos, SA_pos, SB_pos, SC_pos, LB_pos, BOTTOM_STOP_POS])
@@ -103,38 +135,45 @@ else:
 	print("Looks good, the assembly can't crash into the bottom of the vessel.")
 
 # check that the stoppers are the right distance apart
-requested_stopper_spacing = TOP_STOP_pos - BOTTOM_STOP_POS
+requested_stopper_spacing = TOP_STOP_POS - BOTTOM_STOP_POS
 if requested_stopper_spacing > maximum_stopper_spacing:
 	print("ERROR: We can't possibly be allowed to travel this far!")
 else:
 	print("Looks good, we're not asking for too much travel.")
 
-# check that the view window is fully on the top screen
-#bottom_screen_beam_center_vertical_offset >=10
-
-
-# check that we can remove the assembly from the beam pipe
-# distance between center of the chamber and the bottom of the frame assembly when at SA (should be at least 125 to clear beam pipe)
-SA_removal_padding = vessel_cross_center_to_actuator_bottom_flange - (assembly_dim - SA_pos)
-if (SA_removal_padding < (beam_pipe_diameter/2)):
+# check that at SA (screens removed) position, the screen is out of the beam pipe
+# distance between the bottom edge of the bottom screen and the top edge of the beam pipe of the chamber and the bottom of the frame assembly when at SA (should be at least 125 to clear beam pipe)
+SA_removal_padding = vessel_cross_center_to_actuator_bottom_flange - (assembly_dim - SA_pos) - beam_pipe_diameter/2
+if (SA_removal_padding <= 0):
 	print("ERROR: the top screen position doesn't fully remove the screen assembly from the beam pipe")
 else:
 	print("Looks good, we can remove the assembly from the pipe")
 
-# check that the bottom stopper prevents the cross bar from entering the beam pipe
-cross_bar_safety_padding = (vessel_cross_center_to_actuator_bottom_flange+BOTTOM_STOP_POS - (long_shaft_length+screen_holder_bar_width)) - (beam_pipe_diameter/2)
-if (cross_bar_safety_padding <= 0):
+# check that if we hit the bottom stop, the crossbar is out of the beam pipe
+cross_bar_beam_pipe_padding = (vessel_cross_center_to_actuator_bottom_flange + BOTTOM_STOP_POS - (long_shaft_length+crossbar_height)) - (beam_pipe_diameter/2)
+if (cross_bar_beam_pipe_padding < 0):
 	print("ERROR: The top bar could enter the beam pipe")
 else:
 	print("Looks good, the top bar can never enter the pipe")
 
+# check that if we hit the top stop, the bar doesn't roll off the rollers
+roll_off_padding = (vessel_cross_center_to_actuator_bottom_flange + BOTTOM_STOP_POS - (long_shaft_length+crossbar_height)) - (beam_pipe_diameter/2)
+if (cross_bar_beam_pipe_padding < 0):
+	print("ERROR: The top bar could enter the beam pipe")
+else:
+	print("Looks good, the top bar can never enter the pipe")
+
+
 # check that the order of the switches is proper and within limits
-must_be_increasing = [actuator_flange_spacing_min, BOTTOM_STOP_POS, LB_pos, SC_pos, SB_pos, SA_pos, LT_pos, TOP_STOP_pos, acutator_flange_spacing_max]
-if (all(i <= j for i, j in zip(must_be_increasing, must_be_increasing[1:]))):
+_must_be_increasing = [actuator_flange_spacing_min, BOTTOM_STOP_POS, LB_pos, SC_pos, SB_pos, SA_pos, LT_pos, TOP_STOP_POS, acutator_flange_spacing_max]
+if (all(i <= j for i, j in zip(_must_be_increasing, _must_be_increasing[1:]))):
 	print("Looks good: all switches in order and within limits")
 else:
 	print("ERROR: Something is out of order or beyond limits!")
-del must_be_increasing
+
+
+
+
 def printvars():
   tmp = globals().copy()
   [print(k,'  :  ', '{:.2f} [mm]'.format(v)) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
@@ -142,4 +181,5 @@ def printvars():
     [print(k,'  :  ', '{:0.2f} [mm]'.format(v), file=results) for k,v in tmp.items() if not k.startswith('_') and k!='tmp' and k!='In' and k!='Out' and not hasattr(v, '__call__')]
 
 printvars()
+print(f'Must be increasing: {_must_be_increasing}')
 print('Done!')
