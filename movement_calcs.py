@@ -3,12 +3,15 @@
 # assuming UHV actuator part# HLSML64-600-H
 # all units in mm
 
+# if True, the crossbar will be a 5mm thick plate
+use_thinner_crossbar = False
+
 actuator_travel = 600 # maximum possible travel of actuator
 actuator_flange_spacing_min = 260 # minimum possible distance from top of moving flange to bottom of stationary one
 acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
 
 # we'll install the lower physical travel hard stop this far away from the most contracted position
-bottom_end_stop_padding = 10
+bottom_end_stop_padding = 15
 
 # the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
 vessel_cross_center_to_actuator_bottom_flange = 685.05
@@ -25,11 +28,11 @@ beam_pipe_diameter = 250
 view_diameter = 220
 
 # vertical dimension of the top horizontal screen holder bar (aka the bar's cross-sectional, width=height)
-#screen_holder_bar_width = 25
-crossbar_height = 5
+if use_thinner_crossbar:
+	crossbar_height = 5
+else:
+	crossbar_height = 25
 square_crosssection = 25
-
-
 
 # vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
 screen_screen_spacing = 0
@@ -47,14 +50,15 @@ bottom_screen_beam_center_vertical_offset = 0
 #bottom_screen_beam_center_vertical_offset = 5
 
 # when we're at SC (top screen in beam) the beam center will be this many mm above the center of the screen (going to be negative)
-
-#top_screen_beam_center_vertical_offset = -5
 top_screen_beam_center_vertical_offset = -5
 
 # amount of buffer we'll move the top stopper down from its absolute maximum value
 top_stopper_buffer = 1
 
-minimum_switch_switch_spacing = 11.36  # smallest possible spacing between limit/position switches
+if use_thinner_crossbar:
+	minimum_switch_switch_spacing = 11.36  # smallest possible spacing between limit/position switches
+else:
+	minimum_switch_switch_spacing = 1
 minimum_switch_stopper_spacing = 1 # smallest possible spacing between limit switches and end stops
 
 # vertical spacing between the bottom face of the horizontal screen holder bar and the top edge of the top screen
@@ -76,7 +80,23 @@ side_shaft_lengths = 2 * screen_dim_y + screen_screen_spacing + top_screen_holde
 # total frame holder assembly vertical dimension
 assembly_dim = long_shaft_length + side_shaft_lengths + crossbar_height
 
-total_bar_length_need = 2*side_shaft_lengths + long_shaft_length
+# long shaft length reduction for L-Bracket swinger
+l_bracket_length_reduction = 10
+
+no_crossbar_total_length = 2*side_shaft_lengths + long_shaft_length - l_bracket_length_reduction
+crossbar_total_length = 2*side_shaft_lengths + long_shaft_length + crossbar_shaft_length - l_bracket_length_reduction
+
+if use_thinner_crossbar:
+	print(f'Total strut length = {no_crossbar_total_length}mm:')
+	print(f'That is 2x {side_shaft_lengths}mm')
+	print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
+else:
+	print(f'Total strut length = {crossbar_total_length}mm:')
+	print(f'That is 2x {side_shaft_lengths}mm')
+	print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
+	print(f'And 1x {crossbar_shaft_length}mm')
+
+
 
 
 #  possible screen positions
@@ -166,6 +186,7 @@ else:
 
 # check that the order of the switches is proper and within limits
 _must_be_increasing = [actuator_flange_spacing_min, BOTTOM_STOP_POS, LB_pos, SC_pos, SB_pos, SA_pos, LT_pos, TOP_STOP_POS, acutator_flange_spacing_max]
+_must_be_increasing_from_zero = [x-actuator_flange_spacing_min for x in _must_be_increasing ]
 if (all(i <= j for i, j in zip(_must_be_increasing, _must_be_increasing[1:]))):
 	print("Looks good: all switches in order and within limits")
 else:
@@ -182,4 +203,5 @@ def printvars():
 
 printvars()
 print(f'Must be increasing: {_must_be_increasing}')
+print(f'Must be increasing from zero: {_must_be_increasing_from_zero}')
 print('Done!')
