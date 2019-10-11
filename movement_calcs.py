@@ -6,12 +6,12 @@
 # if True, the crossbar will be a 5mm thick plate
 use_thinner_crossbar = False
 
-actuator_travel = 600 # maximum possible travel of actuator
-actuator_flange_spacing_min = 260 # minimum possible distance from top of moving flange to bottom of stationary one
+actuator_travel = 600  # maximum possible travel of actuator
+actuator_flange_spacing_min = 260  # minimum possible distance from top of moving flange to bottom of stationary one
 acutator_flange_spacing_max = actuator_flange_spacing_min + actuator_travel
 
 # we'll install the lower physical travel hard stop this far away from the most contracted position
-bottom_end_stop_padding = 15
+bottom_end_stop_padding = 50
 
 # the distance between the center of the chamber and the bottom of the non-moving flange of the actuator 
 vessel_cross_center_to_actuator_bottom_flange = 685.05
@@ -29,9 +29,9 @@ view_diameter = 220
 
 # vertical dimension of the top horizontal screen holder bar (aka the bar's cross-sectional, width=height)
 if use_thinner_crossbar:
-	crossbar_height = 5
+  crossbar_height = 5
 else:
-	crossbar_height = 25
+  crossbar_height = 25
 square_crosssection = 25
 
 # vertical spacing between the bottom edge of the top screen and the top edge of the bottom screen
@@ -43,6 +43,9 @@ screen_screen_spacing = 0
 # dimension of the screen
 screen_dim_y = 230
 screen_dim_x = 290
+
+# offset of left edge of switch bracket
+switch_bracket_offset = 179.75
 
 # when we're at SB (bottom screen in beam) the beam center will be this many mm above the center of the screen (going to be positive)
 # must be on [-5,5] so that the screen stays in the viewing area
@@ -186,7 +189,7 @@ else:
 
 # check that the order of the switches is proper and within limits
 _must_be_increasing = [actuator_flange_spacing_min, BOTTOM_STOP_POS, LB_pos, SC_pos, SB_pos, SA_pos, LT_pos, TOP_STOP_POS, acutator_flange_spacing_max]
-_must_be_increasing_from_zero = [x-actuator_flange_spacing_min for x in _must_be_increasing ]
+_must_be_increasing_from_offset = [x-actuator_flange_spacing_min for x in _must_be_increasing ]
 if (all(i <= j for i, j in zip(_must_be_increasing, _must_be_increasing[1:]))):
 	print("Looks good: all switches in order and within limits")
 else:
@@ -203,5 +206,5 @@ def printvars():
 
 printvars()
 print(f'Must be increasing: {_must_be_increasing}')
-print(f'Must be increasing from zero: {_must_be_increasing_from_zero}')
+print(f'Must be increasing from zero: {_must_be_increasing_from_offset}')
 print('Done!')
