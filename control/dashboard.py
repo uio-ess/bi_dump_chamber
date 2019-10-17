@@ -4,7 +4,8 @@ import epics
 import time
 
 # address of the machine running the IOC
-IOC_IP = "172.30.150.81"
+# iocuser@
+IOC_IP = "bd-cpu14.cslab.esss.lu.se"
 os.environ["EPICS_CA_ADDR_LIST"] = IOC_IP
 
 # prints position for a number of seconds
