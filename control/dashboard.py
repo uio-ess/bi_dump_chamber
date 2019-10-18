@@ -90,11 +90,11 @@ def stop():
 
 # pauses the motor's motion
 def pause():
-  epics.caput(ax+'.STOP', 1)
+  epics.caput(ax+'.SPMG', 1)
 
 # unpause the motor's motion
 def unpause():
-  epics.caput(ax+'.STOP', 2)
+  epics.caput(ax+'.SPMG', 2)
 
 # disable pause mode
 def no_pause():
@@ -107,11 +107,44 @@ def moving():
   #return (not done_moving_flag) or (movement_in_progress_flag)
   return (not (epics.caget(ax+'.DMOV') == 1))
 
-#def get_motor_status():
+def get_motor_status():
+  stup = epics.caget(ax+'.STUP') # read status update field
+  if stup != 0:
+    logging.warning(f"Status update field = {stup}, can't request status update")
+    return None
+  epics.caput(ax+'.STUP',1)
+  while(epics.caget(ax+'.STUP') != 0):
+    pass
+  return(int(epics.caget(ax+'.MSTA')))
+
+def print_motor_status(verbose=True):
+  motor_status = get_motor_status()
+  if motor_status is not None:
+    logging.info(f"Motor Status Bits: 0b{motor_status:>016b}")
+  if (verbose == True):
+    bitnames = [
+      'DIRECTION',
+      'DONE',
+      'PLUS_LS',
+      'HOME_LS',
+      'unused',
+      'SLIP_STALL',
+      'HOME',
+      'PRESENT',
+      'PROBLEM',
+      'MOVING',
+      'GAIN_SUPPORT',
+      'COMM_ERROR',
+      'MINUS_LS',
+      'HOMED']
+
+    for i in range(15-1):
+      bit_val = ((motor_status>>i)&1) == 1
+      logging.info(f"{str(i+1)+'.':<3} {bitnames[i]:<12} --> {bit_val}")
 
 initial_position = get_pos()
 logging.info(f"Initial position: {initial_position} [mm]")
-
+print_motor_status()
 
 # jog fwd
 jog(forward=True, duration=5)
@@ -123,9 +156,12 @@ jog(forward=True, duration=7)
 goto(2.0)
 
 goto(0.0, block=False)
+time.sleep(0.2)
+print_motor_status()
 
 while moving(): pass
 final_position = get_pos()
 logging.info(f"Final position: {final_position} [mm]")
+print_motor_status()
 
 logging.debug("Done")
