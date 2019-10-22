@@ -4,7 +4,7 @@
 # all units in mm
 
 # if True, the crossbar will be a 5mm thick plate
-use_thinner_crossbar = True
+use_thinner_crossbar = False
 
 actuator_travel = 600  # maximum possible travel of actuator
 actuator_flange_spacing_min = 260  # minimum possible distance from top of moving flange to bottom of stationary one
@@ -60,9 +60,9 @@ top_screen_beam_center_vertical_offset = -5
 top_stopper_buffer = 1
 
 if use_thinner_crossbar:
-	minimum_switch_switch_spacing = 11.36  # smallest possible spacing between limit/position switches
+  minimum_switch_switch_spacing = 11.36  # smallest possible spacing between limit/position switches
 else:
-	minimum_switch_switch_spacing = 1
+  minimum_switch_switch_spacing = 1
 minimum_switch_stopper_spacing = 1 # smallest possible spacing between limit switches and end stops
 
 # vertical spacing between the bottom face of the horizontal screen holder bar and the top edge of the top screen
@@ -91,16 +91,14 @@ no_crossbar_total_length = 2*side_shaft_lengths + long_shaft_length - l_bracket_
 crossbar_total_length = 2*side_shaft_lengths + long_shaft_length + crossbar_shaft_length - l_bracket_length_reduction
 
 if use_thinner_crossbar:
-	print(f'Total strut length = {no_crossbar_total_length}mm:')
-	print(f'That is 2x {side_shaft_lengths}mm')
-	print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
+  print(f'Total strut length = {no_crossbar_total_length}mm:')
+  print(f'That is 2x {side_shaft_lengths}mm')
+  print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
 else:
-	print(f'Total strut length = {crossbar_total_length}mm:')
-	print(f'That is 2x {side_shaft_lengths}mm')
-	print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
-	print(f'And 1x {crossbar_shaft_length}mm')
-
-
+  print(f'Total strut length = {crossbar_total_length}mm:')
+  print(f'That is 2x {side_shaft_lengths}mm')
+  print(f'And 1x {long_shaft_length-l_bracket_length_reduction}mm')
+  print(f'And 1x {crossbar_shaft_length}mm')
 
 
 #  possible screen positions
@@ -119,7 +117,6 @@ else:
 # defined as switch installation position such that the distance between the midpoint of the switch
 # hysteresis occurs when the the bottom of the stationary flange is this many mm away from the top of the moving flange
 # must be on the interval [fully withdrawn, fully inserted] = [860,260]
-
 
 
 BOTTOM_STOP_POS = actuator_flange_spacing_min + bottom_end_stop_padding # location to install the bottom movement stopper
@@ -182,10 +179,10 @@ else:
 
 # check that if we hit the top stop, the bar doesn't roll off the rollers
 roll_off_padding = (vessel_cross_center_to_actuator_bottom_flange + BOTTOM_STOP_POS - (long_shaft_length+crossbar_height)) - (beam_pipe_diameter/2)
-if (cross_bar_beam_pipe_padding < 0):
-	print("ERROR: The top bar could enter the beam pipe")
+if (roll_off_padding < 0):
+	print("ERROR: The shaft might roll off the rollers")
 else:
-	print("Looks good, the top bar can never enter the pipe")
+	print("Looks good, the shaft can't roll off the rollers")
 
 
 # check that the order of the switches is proper and within limits
@@ -195,8 +192,6 @@ if (all(i <= j for i, j in zip(_must_be_increasing, _must_be_increasing[1:]))):
 	print("Looks good: all switches in order and within limits")
 else:
 	print("ERROR: Something is out of order or beyond limits!")
-
-
 
 
 def printvars():
@@ -209,3 +204,61 @@ printvars()
 print(f'Must be increasing: {_must_be_increasing}')
 #print(f'Switch bracket coordinates: {_bracket_gap_check}')
 print('Done!')
+
+# output for use_thinner_crossbar = False:
+"""
+Total strut length = 2069.05mm:
+That is 2x 467.0mm
+And 1x 835.05mm
+And 1x 300mm
+Looks good, the assembly can't crash into the bottom of the vessel.
+Looks good, we're not asking for too much travel.
+Looks good, we can remove the assembly from the pipe
+Looks good, the top bar can never enter the pipe
+Looks good, the shaft can't roll off the rollers
+Looks good: all switches in order and within limits
+use_thinner_crossbar   :   0.00 [mm]
+actuator_travel   :   600.00 [mm]
+actuator_flange_spacing_min   :   260.00 [mm]
+acutator_flange_spacing_max   :   860.00 [mm]
+bottom_end_stop_padding   :   50.00 [mm]
+vessel_cross_center_to_actuator_bottom_flange   :   685.05 [mm]
+vessel_cross_center_to_vessel_bottom_flange   :   464.42 [mm]
+required_top_clearance   :   61.83 [mm]
+beam_pipe_diameter   :   250.00 [mm]
+view_diameter   :   220.00 [mm]
+crossbar_height   :   25.00 [mm]
+square_crosssection   :   25.00 [mm]
+screen_screen_spacing   :   0.00 [mm]
+screen_dim_y   :   230.00 [mm]
+screen_dim_x   :   290.00 [mm]
+bottom_screen_beam_center_vertical_offset   :   0.00 [mm]
+top_screen_beam_center_vertical_offset   :   -5.00 [mm]
+top_stopper_buffer   :   1.00 [mm]
+minimum_switch_switch_spacing   :   1.00 [mm]
+minimum_switch_stopper_spacing   :   1.00 [mm]
+top_screen_holder_spacing   :   7.00 [mm]
+maximum_stopper_spacing   :   473.22 [mm]
+absolute_highest_position_for_top_stopper   :   783.22 [mm]
+long_shaft_length   :   845.05 [mm]
+crossbar_shaft_length   :   300.00 [mm]
+side_shaft_lengths   :   467.00 [mm]
+assembly_dim   :   1337.05 [mm]
+l_bracket_length_reduction   :   10.00 [mm]
+no_crossbar_total_length   :   1769.05 [mm]
+crossbar_total_length   :   2069.05 [mm]
+BOTTOM_STOP_POS   :   310.00 [mm]
+LB_pos   :   311.00 [mm]
+TOP_STOP_POS   :   782.22 [mm]
+LT_pos   :   781.22 [mm]
+SA_pos   :   780.22 [mm]
+SB_pos   :   537.00 [mm]
+SC_pos   :   312.00 [mm]
+bottom_padding   :   806.42 [mm]
+requested_stopper_spacing   :   472.22 [mm]
+SA_removal_padding   :   3.22 [mm]
+cross_bar_beam_pipe_padding   :   0.00 [mm]
+roll_off_padding   :   0.00 [mm]
+Must be increasing: [260, 310, 311, 312, 537.0, 780.22, 781.22, 782.22, 860]
+Done!
+"""
