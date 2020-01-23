@@ -95,6 +95,19 @@ def pause():
 # unpause the motor's motion
 def unpause():
   epics.caput(ax+'.SPMG', 2)
+  
+# return the jog velocity setpoint
+def get_jog_rate():
+  jrate = epics.caget(ax+'.JVEL')
+  logging.info(f'The jog step rate is {jrate/1000} [kHz] (maximum might be 128)')
+  logging.info(f'or {jrate/200/60} motor RPM')
+  logging.info(f'or {jrate/200/60/16} leadscrew RPM')
+  logging.info(f'or {jrate/200/16/2.54} mm/sec (maximum might be 95.25)')
+  return(jrate)
+
+# set the jog velocity
+def set_jog_rate(jrate):
+  epics.caput(ax+'.JVEL', jrate)
 
 # disable pause mode
 def no_pause():
@@ -145,13 +158,24 @@ def print_motor_status(verbose=True):
 initial_position = get_pos()
 logging.info(f"Initial position: {initial_position} [mm]")
 print_motor_status()
+get_jog_rate()
 
 # jog fwd
-jog(forward=True, duration=5)
-
-# jog rev
 jog(forward=True, duration=7)
 
+# jog rev
+jog(forward=False, duration=5)
+
+# now for the speed test
+speed_max = 128000
+jset = speed_max/2
+jtime = 100
+jdistance = jset/200/16/2.54*jtime
+set_jog_rate(jset)
+jget = get_jog_rate()
+#logging.info(f"Jogging at {jget} Hz for {jtime} seconds so we expect to have {jdistance} mm of displacement...")   
+#jog(forward=True, duration=jtime)
+                   
 # goto an exact position
 goto(2.0)
 
