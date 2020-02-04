@@ -10,7 +10,8 @@ logging.basicConfig(format='%(asctime)s-%(levelname)s: %(message)s', level=loggi
 
 # address of the machine running the IOC
 ioc_user = "iocuser"
-IOC_IP = "bd-cpu14.cslab.esss.lu.se"
+#IOC_IP = "bd-cpu14.cslab.esss.lu.se"
+IOC_IP = "10.41.0.165"
 os.environ["EPICS_CA_ADDR_LIST"] = IOC_IP
 
 # some PV names:
@@ -105,9 +106,19 @@ def get_jog_rate():
   logging.info(f'or {jrate/200/16/2.54} mm/sec (maximum might be 95.25)')
   return(jrate)
 
+# return VELO
+def get_speed():
+  velo = epics.caget(ax+'.VELO')
+  logging.info(f'VELO is {velo} [mm/sec]')
+  return(velo)
+
 # set the jog velocity
 def set_jog_rate(jrate):
   epics.caput(ax+'.JVEL', jrate)
+
+# set the velocity
+def set_speed(velo):
+  epics.caput(ax+'.VELO', velo)
 
 # disable pause mode
 def no_pause():
@@ -159,28 +170,44 @@ initial_position = get_pos()
 logging.info(f"Initial position: {initial_position} [mm]")
 print_motor_status()
 get_jog_rate()
-
-# jog fwd
-jog(forward=True, duration=7)
-
-# jog rev
-jog(forward=False, duration=5)
+get_speed()
 
 # now for the speed test
 speed_max = 128000
-jset = speed_max/2
+jset = speed_max/200000
 jtime = 100
 jdistance = jset/200/16/2.54*jtime
 set_jog_rate(jset)
+set_speed(1.5) # max is 1.5875 = 2000/200/16*2.54
+
+v_name = 'ACCL'
+logging.info(f"{v_name} variable: {epics.caget(ax+'.'+v_name)}")
+
+v_name = 'ACCL'
+v_val = 1.0
+epics.caput(ax+'.'+v_name, v_val)
+#logging.info(f"{v_name} variable: {epics.caget(ax+'.'+variable)}")
+
+# jog fwd (fwd is down)
+#jog(forward=False, duration=10)
+
+#down is more positive
+goto(-100)
+
+# jog rev
+#jog(forward=False, duration=5)
+
+
 jget = get_jog_rate()
+speed = get_speed()
 #logging.info(f"Jogging at {jget} Hz for {jtime} seconds so we expect to have {jdistance} mm of displacement...")   
 #jog(forward=True, duration=jtime)
                    
 # goto an exact position
-goto(2.0)
+#goto(2.0)
 
-goto(0.0, block=False)
-time.sleep(0.2)
+#goto(0.0, block=False)
+#time.sleep(0.2)
 print_motor_status()
 
 while moving(): pass
