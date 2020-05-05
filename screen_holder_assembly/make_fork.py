@@ -20,14 +20,19 @@ shaft['swing_hole_offset'] = 12
 crossbar = {'length': screen['hole_spacing'][0]+ext['dim']}
 
 lock_tap_offset = 10 # m4 lock setscrew offset from end
+
+# hole diameters
 holes = {'m6close': 6.3}
 holes['m4tap'] = 3.3
 
 
 assembly = []
-here = pathlib.Path('.')
 
 # get the extrusion from thorlabs
+if "__file__" in locals():
+    here = pathlib.Path(__file__).parent.absolute()
+else:
+    here = pathlib.Path('.') # we don't have __file__, do our best
 stockfile = here.joinpath('step_input', 'XE25RL2-Step.step')
 afp = cq.importers.importStep(str(stockfile))
 
