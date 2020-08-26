@@ -42,7 +42,7 @@ things_that_move (actuator_position);
 //things_that_move (SB_pos);
 
 // at top screen position switch
-//things_that_move (SC_pos);
+things_that_move (SC_pos);
 
 // at bottom limit switch (should never be here, but this should be safe)
 //things_that_move (LB_pos);
