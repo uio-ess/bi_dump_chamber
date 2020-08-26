@@ -12,11 +12,11 @@ vessel_cross_center_to_actuator_bottom_flange = 682.45;
 act_flange_D = 114;
 $fn=50;
 // switch positions
-LT_pos=860.00;
-SA_pos=850.00;
+LT_pos=500;
+SA_pos=780.00;
 SB_pos=612.55;
-SC_pos=377.55;
-LB_pos=357.55;
+SC_pos=330;
+LB_pos=300;
 
 
 // draws the stuff that will move as a funciton of actuator flange spacing
@@ -26,11 +26,11 @@ module things_that_move(mover_position){
 }
 
 // animation
-min_actuator_position = LB_pos;
-max_actuator_position = LT_pos;
+min_actuator_position = SC_pos;
+max_actuator_position = SA_pos;
 t = 2*abs($t-0.5);
-actuator_position = SC_pos + t*(SA_pos-SC_pos);
-//things_that_move (actuator_position);
+actuator_position = SC_pos + t*(max_actuator_position-min_actuator_position);
+things_that_move (actuator_position);
 
 // at top limit switch (should never be here, but this should be safe)
 //things_that_move (LT_pos);
@@ -39,7 +39,7 @@ actuator_position = SC_pos + t*(SA_pos-SC_pos);
 //things_that_move (SA_pos);
 
 // at bottom screen position switch
-things_that_move (SB_pos);
+//things_that_move (SB_pos);
 
 // at top screen position switch
 //things_that_move (SC_pos);

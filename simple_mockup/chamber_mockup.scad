@@ -1,8 +1,6 @@
 flangeT=23; // thickness of flange
 flangeExtra = 45; //extra diameter of flange beyond inner diameter
 
-pipeWallT = 4.78;
-
 pipeInnerD = 250;
 pipeWallT = 4.78;
 pipeOuterD = pipeWallT + pipeInnerD;
@@ -12,6 +10,10 @@ topPipeInnerD = 350;
 topPipeOuterD = topPipeInnerD + pipeWallT;
 
 subtractFudge = 2;
+
+// for the window
+viewPipeShorten = 20;
+viewPortD = 200;
 
 module drawChamber ( botPipeL=460, topPipeL=630, upstreamPipeL=400, downstreamPipeL=300, viewPipeL=380, viewPortZAngle=-135 ) {
     difference(){
@@ -36,8 +38,9 @@ module drawChamber ( botPipeL=460, topPipeL=630, upstreamPipeL=400, downstreamPi
         }
         rotate([0,-90,0]) translate([0,0,-downstreamPipeL-subtractFudge/2]) cylinder(h=downstreamPipeL+upstreamPipeL+subtractFudge, d=pipeOuterD-2*pipeWallT); // inner horz pipe
         translate([0,0,-botPipeL-subtractFudge/2]) cylinder(h=botPipeL+topPipeL+subtractFudge, d=topPipeOuterD-2*pipeWallT); //inner vert pipe
-        rotate([-90,0,viewPortZAngle+90]) translate([0,0,-viewPipeL-subtractFudge/2]) cylinder(h=viewPipeL+subtractFudge, d=pipeOuterD-2*pipeWallT); //inner view pipe
+        rotate([-90,0,viewPortZAngle+90]) translate([0,0,-viewPipeL-subtractFudge/2+viewPipeShorten]) cylinder(h=viewPipeL+subtractFudge-viewPipeShorten, d=pipeOuterD-2*pipeWallT); //inner view pipe
+        rotate([-90,0,viewPortZAngle+90]) translate([0,0,-viewPipeL-subtractFudge/2]) cylinder(h=viewPipeL+subtractFudge, d=viewPortD); //inner view pipe viewport
     }
 }
 
-
+//drawChamber();
