@@ -19,22 +19,14 @@ plate_y = plate.findSolid().BoundingBox().ylen
 plate = plate.translate((-plate_x/2,-plate_y/2,-plate_thickness))
 asy.extend(plate.vals())
 
-# post base clamp
-clamp_filename = "PF175B-Step.step"
-clamp = cq.importers.importShape(cq.importers.ImportTypes.STEP, clamp_filename)
-clamp = clamp.rotate((0,0,0), (1,0,0), angleDegrees=90)
-clamp = clamp.rotate((0,0,0), (0,0,1), angleDegrees=90)
-clamp = clamp.translate((0,post_y_offset_from_center,0))
-asy.extend(clamp.vals())
-
-# post base flange
-base_filename = "PB4_M-Step.step"
+# post base fork
+base_filename = "BA1L_M-Step.step"
 base = cq.importers.importShape(cq.importers.ImportTypes.STEP, base_filename)
 base = base.rotate((0,0,0), (1,0,0), angleDegrees=90)
-base_thickness = 6.1
-base = base.translate((0,post_y_offset_from_center,base_thickness))
+#base_thickness = 6.1
+base_thickness = base.findSolid().BoundingBox().zlen
+base = base.translate((0,post_y_offset_from_center,0))
 asy.extend(base.vals())
-
 
 # post (for top)
 post_filename = 'P250_M-Step.step'
@@ -154,7 +146,7 @@ bot_mirror_cpnd = bot_mirror_cpnd.translate((0,post_y_offset_from_center+clamp_p
 
 top_base_cpnd = cq.Compound.makeCompound(tm_asy)
 
-view_pipe_angle = 45
+view_pipe_angle = 45 # angle of the chamber viewpipe
 # polaris_post for bottom
 ppost2 = cq.importers.importShape(cq.importers.ImportTypes.STEP, ppost_filename)
 ppost2 = ppost2.translate(ppost_stepfile_offset)
@@ -178,8 +170,9 @@ bot_clampboard_diff = -45
 bot_mirror_cpnd = bot_mirror_cpnd.rotate((0,0,clamp_along_post-clamp_shift), (0,1,clamp_along_post-clamp_shift), angleDegrees=-view_pipe_angle)
 bot_mirror_cpnd = bot_mirror_cpnd.translate((0,0,bot_clampboard_diff))
 
+d_bottom_large_post_rotate = 0  #rotation for bottom mirror clamp around big post to account for misalignment between tp and bottom system along beampath
 bot_base_cpnd = cq.Compound.makeCompound(bm_asy)
-bot_base_cpnd = bot_base_cpnd.rotate((0,post_y_offset_from_center,0), (0,post_y_offset_from_center,1), angleDegrees=180)
+bot_base_cpnd = bot_base_cpnd.rotate((0,post_y_offset_from_center,0), (0,post_y_offset_from_center,1), angleDegrees=180+d_bottom_large_post_rotate)
 bot_base_cpnd = bot_base_cpnd.translate((0,0,bot_clampboard_diff))
 
 tmir_asy = []
@@ -234,10 +227,11 @@ if 'show_object' in locals():
     show_object(top_plate)
 
 # translate the bottom setup
-bottom_translate = 1500 # kind of arbitrary
-bot_mirror_cpnd=bot_mirror_cpnd.translate((0,-bottom_translate,0))
-bot_plate = bot_plate.translate((0,-bottom_translate,0))
-bot_base_cpnd = bot_base_cpnd.translate((0,-bottom_translate,0))
+bottom_y_translate = 1500 # just a guess (height difference along along wall)
+bottom_x_translate = 0 # unknown right now (shift along beam line)
+bot_mirror_cpnd=bot_mirror_cpnd.translate((bottom_x_translate,-bottom_y_translate,0))
+bot_plate = bot_plate.translate((bottom_x_translate,-bottom_y_translate,0))
+bot_base_cpnd = bot_base_cpnd.translate((bottom_x_translate,-bottom_y_translate,0))
 
 # render the bottom bits
 if 'show_object' in locals():
