@@ -10,7 +10,7 @@ asy=[]
 plate_thickness = 15
 post_y_offset_from_center = 145
 plate_dxf_filename = 'plate_layout.dxf'
-plate2d = cq.importers.importShape(cq.importers.ImportTypes.DXF, plate_dxf_filename, ignored_layers=['dims'])
+plate2d = cq.importers.importShape(cq.importers.ImportTypes.DXF, plate_dxf_filename, exclude=['dims'])
 tmp = plate2d.faces().wires()
 tmp.ctx.pendingWires = tmp.vals()
 plate = tmp.extrude(plate_thickness)
